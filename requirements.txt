@@ -13,3 +13,6 @@ httpx>=0.25.0
 
 # Data Validation (included with FastAPI, but explicit)
 pydantic>=2.5.0
+
+# Environment variable loader
+python-dotenv>=1.0.0

@@ -66,22 +66,25 @@ class Settings:
     """
     Central settings manager that aggregates all configuration.
     
-    Loads configuration from environment variables with fallbacks
-    to default values for development/demo purposes.
+    Loads configuration from environment variables.
+    Upstash credentials are REQUIRED - no defaults provided for security.
     """
     
     def __init__(self):
-        # Load Upstash credentials from environment or use defaults
-        # In production, these MUST come from environment variables
-        self.upstash = UpstashConfig(
-            rest_url=os.getenv(
-                "UPSTASH_REDIS_REST_URL",
-                "https://kind-coyote-8979.upstash.io"
-            ),
-            rest_token=os.getenv(
-                "UPSTASH_REDIS_REST_TOKEN",
-                "ASMTAAImcDI0Y2Q3MWIzZjZmOWE0Mzg4YTIwNjQ3MjgzNmVlNDU2NXAyODk3OQ"
+        # Load Upstash credentials from environment variables (REQUIRED)
+        # These must be set in production - no hardcoded defaults for security
+        upstash_url = os.getenv("UPSTASH_REDIS_REST_URL")
+        upstash_token = os.getenv("UPSTASH_REDIS_REST_TOKEN")
+        
+        if not upstash_url or not upstash_token:
+            raise ValueError(
+                "Missing required environment variables: "
+                "UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN must be set"
             )
+        
+        self.upstash = UpstashConfig(
+            rest_url=upstash_url,
+            rest_token=upstash_token
         )
         
         # Worker configuration

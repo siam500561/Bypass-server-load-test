@@ -14,6 +14,10 @@ import sys
 import signal
 from multiprocessing import Process
 
+# Load environment variables from .env file BEFORE importing app modules
+from dotenv import load_dotenv
+load_dotenv()
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
